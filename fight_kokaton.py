@@ -5,7 +5,6 @@ import sys
 import time
 import pygame as pg
 
-
 WIDTH = 1100  # ゲームウィンドウの幅
 HEIGHT = 650  # ゲームウィンドウの高さ
 NUM_OF_BOMBS = 5  # 爆弾の個数
@@ -90,6 +89,7 @@ class Beam:
     """
     こうかとんが放つビームに関するクラス
     """
+
     def __init__(self, bird:"Bird"):
         """
         ビーム画像Surfaceを生成する
@@ -115,13 +115,14 @@ class Bomb:
     """
     爆弾に関するクラス
     """
+
     def __init__(self, color: tuple[int, int, int], rad: int):
         """
         引数に基づき爆弾円Surfaceを生成する
         引数1 color：爆弾円の色タプル
         引数2 rad：爆弾円の半径
         """
-        self.img = pg.Surface((2*rad, 2*rad))
+        self.img = pg.Surface((2 * rad, 2 * rad))
         pg.draw.circle(self.img, color, (rad, rad), rad)
         self.img.set_colorkey((0, 0, 0))
         self.rct = self.img.get_rect()
@@ -166,14 +167,16 @@ def main():
             if bird.rct.colliderect(bomb.rct):
                 # ゲームオーバー時に，こうかとん画像を切り替え，1秒間表示させる
                 bird.change_img(8, screen)
-                
+                fonto = pg.font.Font(None, 80)
+                txt = fonto.render("Game Over", True, (255, 0, 0))
+                screen.blit(txt, [WIDTH // 2 - 150, HEIGHT // 2])
                 pg.display.update()
                 time.sleep(1)
                 return
         
         # if bomb is not None:
         for j, bomb in enumerate(bombs):
-            if beam is not None:    
+            if beam is not None: 
                 if beam.rct.colliderect(bomb.rct):  # ビームと爆弾の衝突判定
                     beam = None  # ビームを消す
                     bombs[j] = None  # 爆弾を消す
@@ -189,7 +192,6 @@ def main():
         pg.display.update()
         tmr += 1
         clock.tick(50)
-
 
 if __name__ == "__main__":
     pg.init()
