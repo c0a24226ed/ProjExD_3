@@ -191,9 +191,10 @@ def main():
 <<<<<<< HEAD
 =======
 
-        for j, bomb in enumerate(bombs):
-            if beam is not None:
-                if beam.rct.colliderect(bomb.rct):
+        for j, bomb in enumerate(bombs):  #ボムとｊの両方を取得
+            if beam is not None:  #ビームが画面上に存在している（Noneではない）場合のみ、処理を行う
+                
+                if beam.rct.colliderect(bomb.rct):  #当たり判定
                     beam = None
                     bombs[j] = None
                     bird.change_img(6, screen)
