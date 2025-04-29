@@ -10,9 +10,10 @@ NUM_OF_BOMBS = 5
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
+
 def check_bound(obj_rct: pg.Rect) -> tuple[bool, bool]:
     yoko, tate = True, True
-    if obj_rct.left < 0 or WIDTH < obj_rct.right:  #WIDTH-100にしたら壁の手前で消えました。
+    if obj_rct.left < 0 or WIDTH < obj_rct.right:  # WIDTH-100にしたら壁の手前で消えました。
         yoko = False
     if obj_rct.top < 0 or HEIGHT < obj_rct.bottom:
         tate = False
@@ -63,6 +64,7 @@ class Bird:
 
 
 class Beam:
+
     def __init__(self, bird: "Bird"):
         self.img = pg.image.load("fig/beam.png")
         self.rct = self.img.get_rect()
@@ -77,6 +79,7 @@ class Beam:
 
 
 class Bomb:
+
     def __init__(self, color: tuple[int, int, int], rad: int):
         self.img = pg.Surface((2 * rad, 2 * rad))
         pg.draw.circle(self.img, color, (rad, rad), rad)
@@ -96,6 +99,7 @@ class Bomb:
 
 
 class Score:
+
     def __init__(self):
         self.fonto = pg.font.SysFont("hgp創英角ﾎﾟｯﾌﾟ体", 30)
         self.color = (0, 0, 255)
@@ -109,12 +113,31 @@ class Score:
         screen.blit(self.img, self.rct)
 
 
+class Explosion:
+
+    def __init__(self, bomb: Bomb):
+        self.imgs = [
+            pg.image.load("fig/explosion.gif"),
+            pg.transform.flip(pg.image.load("fig/explosion.gif"), True, False)
+        ]
+        self.life = 20  # 表示時間（フレーム数）
+        self.img = self.imgs[0]
+        self.rct = self.img.get_rect(center=bomb.rct.center)
+
+    def update(self, screen: pg.Surface):
+        self.life -= 1
+        self.img = self.imgs[self.life // 5 % 2]  # 交互に画像切り替え
+        screen.blit(self.img, self.rct)
+        return self.life > 0
+
+
 def main():
     pg.display.set_caption("たたかえ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     bg_img = pg.image.load("fig/pg_bg.jpg")
     bird = Bird((300, 200))
     beam_list = []
+    explosions = []
     bombs = [Bomb((255, 0, 0), 10) for _ in range(NUM_OF_BOMBS)]
     score = Score()
     clock = pg.time.Clock()
@@ -145,7 +168,7 @@ def main():
                     bombs[j] = None
                     bird.change_img(6, screen)
                     score.score += 1
-        bombs = [b for b in bombs if b is not None]  #is not none...Noneでないことを確認
+        bombs = [b for b in bombs if b is not None]  # is not none...Noneでないことを確認
     
         key_lst = pg.key.get_pressed()
         bird.update(key_lst, screen)
@@ -153,8 +176,15 @@ def main():
         new_beam_list = []
         for beam in beam_list:
             if beam.update(screen):  # True: 画面内 → 継続
-                new_beam_list.append(beam)  #listにappendしてる！！
+                new_beam_list.append(beam)  # listにappendしてる！！
         beam_list = new_beam_list
+        
+        new_explosions = []
+        for ex in explosions:
+            if ex.update(screen):  # lifeが残っていれば残す
+                new_explosions.append(ex)
+        explosions = new_explosions
+
 
         for bomb in bombs:
             bomb.update(screen)
