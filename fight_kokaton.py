@@ -113,22 +113,7 @@ class Score:
         screen.blit(self.img, self.rct)
 
 
-class Explosion:
 
-    def __init__(self, bomb: Bomb):
-        self.imgs = [
-            pg.image.load("fig/explosion.gif"),
-            pg.transform.flip(pg.image.load("fig/explosion.gif"), True, False)
-        ]
-        self.life = 20  # 表示時間（フレーム数）
-        self.img = self.imgs[0]
-        self.rct = self.img.get_rect(center=bomb.rct.center)
-
-    def update(self, screen: pg.Surface):
-        self.life -= 1
-        self.img = self.imgs[self.life // 5 % 2]  # 交互に画像切り替え
-        screen.blit(self.img, self.rct)
-        return self.life > 0
 
 
 def main():
