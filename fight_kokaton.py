@@ -63,10 +63,7 @@ class Bird:
 
 
 class Beam:
-<<<<<<< HEAD
 
-=======
->>>>>>> score
     def __init__(self, bird: "Bird"):
         self.img = pg.image.load("fig/beam.png")
         self.rct = self.img.get_rect()
@@ -75,22 +72,19 @@ class Beam:
         self.vx, self.vy = +5, 0
 
     def update(self, screen: pg.Surface):
-<<<<<<< HEAD
         self.rct.move_ip(self.vx, self.vy)
         screen.blit(self.img, self.rct)
         return check_bound(self.rct) == (True, True)
 
 
+# class Bomb:
+
+#         if check_bound(self.rct) == (True, True):
+#             self.rct.move_ip(self.vx, self.vy)
+#             screen.blit(self.img, self.rct)
+
+
 class Bomb:
-
-=======
-        if check_bound(self.rct) == (True, True):
-            self.rct.move_ip(self.vx, self.vy)
-            screen.blit(self.img, self.rct)
-
-
-class Bomb:
->>>>>>> score
     def __init__(self, color: tuple[int, int, int], rad: int):
         self.img = pg.Surface((2 * rad, 2 * rad))
         pg.draw.circle(self.img, color, (rad, rad), rad)
@@ -110,72 +104,54 @@ class Bomb:
 
 
 class Score:
-<<<<<<< HEAD
 
     def __init__(self):
         self.fonto = pg.font.SysFont("hgp創英角ﾎﾟｯﾌﾟ体", 30)
         self.color = (0, 0, 255)
-=======
     """
     爆弾を撃ち落とした数（スコア）を管理・表示するクラス
     """
     def __init__(self):
         self.fonto = pg.font.SysFont("hgp創英角ﾎﾟｯﾌﾟ体", 30)
         self.color = (0, 0, 255)  # 青色
->>>>>>> score
         self.score = 0
         self.img = self.fonto.render(f"スコア: {self.score}", 0, self.color)
         self.rct = self.img.get_rect()
         self.rct.center = (100, HEIGHT - 50)
 
     def update(self, screen: pg.Surface):
-<<<<<<< HEAD
-=======
         """
         現在のスコアを画面左下に表示する
         引数 screen：画面Surface
         """
->>>>>>> score
         self.img = self.fonto.render(f"スコア: {self.score}", 0, self.color)
         screen.blit(self.img, self.rct)
 
 
-<<<<<<< HEAD
 
 
 
-=======
->>>>>>> score
 def main():
     pg.display.set_caption("たたかえ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     bg_img = pg.image.load("fig/pg_bg.jpg")
     bird = Bird((300, 200))
-<<<<<<< HEAD
     beam_list = []
     explosions = []
-=======
     beam = None
->>>>>>> score
     bombs = [Bomb((255, 0, 0), 10) for _ in range(NUM_OF_BOMBS)]
     score = Score()
     clock = pg.time.Clock()
-<<<<<<< HEAD
-=======
     tmr = 0
     score = Score()
->>>>>>> score
 
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 return
             if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
-<<<<<<< HEAD
                 beam_list.append(Beam(bird))
-=======
                 beam = Beam(bird)
->>>>>>> score
 
         screen.blit(bg_img, [0, 0])
 
@@ -188,19 +164,15 @@ def main():
                 pg.display.update()
                 time.sleep(1)
                 return
-<<<<<<< HEAD
-=======
 
-        for j, bomb in enumerate(bombs):  #ボムとｊの両方を取得
-            if beam is not None:  #ビームが画面上に存在している（Noneではない）場合のみ、処理を行う
-                
-                if beam.rct.colliderect(bomb.rct):  #当たり判定
+        for j, bomb in enumerate(bombs):
+            if beam is not None:
+                if beam.rct.colliderect(bomb.rct):
                     beam = None
                     bombs[j] = None
                     bird.change_img(6, screen)
                     score.score += 1
         bombs = [bomb for bomb in bombs if bomb is not None]
->>>>>>> score
 
         for beam in beam_list:
             for j, bomb in enumerate(bombs):
@@ -235,11 +207,8 @@ def main():
         clock.tick(50)
 
 
-<<<<<<< HEAD
-if __name__ == "__main__": 
-=======
+
 if __name__ == "__main__":
->>>>>>> score
     pg.init()
     main()
     pg.quit()
